@@ -1,0 +1,378 @@
+@import './theme.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   Librarian Luxe — Global Styles
+   ============================================ */
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--ll-bg);
+    color: var(--ll-text);
+    font-family: var(--ll-font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    line-height: 1.6;
+    /* Subtle paper texture via CSS noise */
+    background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  }
+}
+
+@layer components {
+  /* ---- Page Container ---- */
+  .page-container {
+    min-height: 100vh;
+    background-color: var(--ll-bg);
+  }
+
+  /* ---- Paper Card ---- */
+  .paper-card {
+    background: var(--ll-surface);
+    border: 0.5px solid var(--ll-border);
+    border-radius: var(--ll-radius-lg);
+    box-shadow: var(--ll-shadow-sm);
+    transition: all 0.25s ease;
+  }
+
+  .paper-card:hover {
+    box-shadow: var(--ll-shadow-md);
+  }
+
+  /* Keep glass-card class for backward compat during migration */
+  .glass-card {
+    background: var(--ll-surface);
+    border: 0.5px solid var(--ll-border);
+    border-radius: var(--ll-radius-xl);
+    box-shadow: var(--ll-shadow-md);
+    transition: all 0.25s ease;
+  }
+
+  .glass-card:hover {
+    box-shadow: var(--ll-shadow-lg);
+  }
+
+  .glass-card-light {
+    background: var(--ll-surface);
+    border: 0.5px solid var(--ll-border);
+    border-radius: var(--ll-radius-lg);
+  }
+
+  /* ---- Buttons ---- */
+  .btn-primary {
+    background-color: var(--ll-accent);
+    color: white;
+    font-family: var(--ll-font-body);
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: var(--ll-radius-md);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--ll-accent-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(42, 107, 92, 0.2);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--ll-primary);
+    font-family: var(--ll-font-body);
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: var(--ll-radius-md);
+    border: 1px solid var(--ll-border-strong);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--ll-primary-50);
+    border-color: var(--ll-primary);
+    transform: translateY(-1px);
+  }
+
+  .btn-danger {
+    background-color: var(--ll-danger-light);
+    color: var(--ll-danger);
+    font-family: var(--ll-font-body);
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: var(--ll-radius-md);
+    border: 1px solid rgba(196, 75, 43, 0.2);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+  }
+
+  .btn-danger:hover {
+    background-color: rgba(196, 75, 43, 0.15);
+    border-color: var(--ll-danger);
+  }
+
+  /* ---- Input Fields ---- */
+  .input-field {
+    width: 100%;
+    background: var(--ll-input-bg);
+    border: 1px solid var(--ll-input-border);
+    color: var(--ll-text);
+    font-family: var(--ll-font-body);
+    padding: 12px 16px;
+    border-radius: var(--ll-radius-md);
+    font-size: 15px;
+    transition: all 0.2s ease;
+    outline: none;
+  }
+
+  .input-field::placeholder {
+    color: var(--ll-input-placeholder);
+  }
+
+  .input-field:focus {
+    border-color: var(--ll-input-focus);
+    box-shadow: 0 0 0 3px rgba(42, 107, 92, 0.1);
+    background-color: white;
+  }
+
+  /* ---- Card Hover ---- */
+  .card-hover {
+    transition: all 0.25s ease;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--ll-shadow-md);
+  }
+
+  /* ---- Typography ---- */
+  .heading-display {
+    font-family: var(--ll-font-display);
+    color: var(--ll-primary);
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .text-muted {
+    color: var(--ll-text-secondary);
+  }
+
+  .font-mono {
+    font-family: var(--ll-font-mono);
+  }
+
+  /* ---- Condition Badges ---- */
+  .badge-excellent {
+    background: rgba(42, 125, 79, 0.1);
+    color: var(--ll-condition-excellent);
+    border: 1px solid rgba(42, 125, 79, 0.2);
+  }
+
+  .badge-good {
+    background: rgba(184, 134, 11, 0.1);
+    color: var(--ll-condition-good);
+    border: 1px solid rgba(184, 134, 11, 0.2);
+  }
+
+  .badge-fair {
+    background: rgba(217, 118, 82, 0.1);
+    color: var(--ll-condition-fair);
+    border: 1px solid rgba(217, 118, 82, 0.2);
+  }
+
+  .badge-poor {
+    background: rgba(196, 75, 43, 0.1);
+    color: var(--ll-condition-poor);
+    border: 1px solid rgba(196, 75, 43, 0.2);
+  }
+
+  /* ---- Spine Accent (Book Card left border) ---- */
+  .spine-excellent { border-left: 4px solid var(--ll-condition-excellent); }
+  .spine-good { border-left: 4px solid var(--ll-condition-good); }
+  .spine-fair { border-left: 4px solid var(--ll-condition-fair); }
+  .spine-poor { border-left: 4px solid var(--ll-condition-poor); }
+}
+
+/* ============================================
+   Global Element Overrides
+   ============================================ */
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ll-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(122, 79, 30, 0.15);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(122, 79, 30, 0.25);
+}
+
+/* ---- Select / Dropdown Styling ---- */
+select {
+  background-color: var(--ll-input-bg);
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%237A4F1E' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 20px;
+  border: 1px solid var(--ll-input-border);
+  border-radius: var(--ll-radius-md);
+  padding: 12px 36px 12px 14px;
+  color: var(--ll-text);
+  font-size: 15px;
+  font-family: var(--ll-font-body);
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+select:hover {
+  border-color: var(--ll-primary-light);
+  background-color: white;
+}
+
+select:focus {
+  border-color: var(--ll-accent);
+  box-shadow: 0 0 0 3px rgba(42, 107, 92, 0.1);
+  background-color: white;
+}
+
+select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+select option {
+  background: var(--ll-surface);
+  color: var(--ll-text);
+  padding: 10px;
+}
+
+select option:checked {
+  background: var(--ll-accent-50);
+  color: var(--ll-accent);
+  font-weight: 500;
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-slideIn,
+.slide-up {
+  animation: slideUp 0.5s ease-out;
+}
+
+.scale-in {
+  animation: scaleIn 0.3s ease-out;
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.3s ease-out;
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+
+/* Paper texture background overlay */
+.paper-texture {
+  position: relative;
+}
+.paper-texture::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
+
+/* Thin separator line */
+.separator {
+  border: none;
+  height: 0.5px;
+  background: var(--ll-border);
+}

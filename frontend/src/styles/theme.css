@@ -1,0 +1,63 @@
+/* ============================================
+   Librarian Luxe — Theme Variables
+   ============================================ */
+
+:root {
+  /* Primary palette */
+  --ll-primary: #7A4F1E;
+  --ll-primary-light: #C4893A;
+  --ll-primary-dark: #5E3B14;
+  --ll-primary-50: #FDF8F0;
+  --ll-primary-100: #F8EBDA;
+
+  /* Background & Surface */
+  --ll-bg: #FAF6EE;
+  --ll-surface: #FFFCF5;
+  --ll-surface-hover: #F5EFE3;
+
+  /* Accent (Forest Teal) */
+  --ll-accent: #2A6B5C;
+  --ll-accent-light: #3D9A87;
+  --ll-accent-dark: #205549;
+  --ll-accent-50: #EDF7F4;
+
+  /* Text */
+  --ll-text: #2C2417;
+  --ll-text-secondary: #8C7B6A;
+  --ll-text-light: #B3A394;
+
+  /* Danger */
+  --ll-danger: #C44B2B;
+  --ll-danger-light: #F9DDD4;
+
+  /* Condition colors */
+  --ll-condition-excellent: #2A7D4F;
+  --ll-condition-good: #B8860B;
+  --ll-condition-fair: #D97652;
+  --ll-condition-poor: #C44B2B;
+
+  /* Borders & Shadows */
+  --ll-border: rgba(122, 79, 30, 0.12);
+  --ll-border-strong: rgba(122, 79, 30, 0.2);
+  --ll-shadow-sm: 0 1px 3px rgba(122, 79, 30, 0.06);
+  --ll-shadow-md: 0 4px 12px rgba(122, 79, 30, 0.1);
+  --ll-shadow-lg: 0 8px 24px rgba(122, 79, 30, 0.12);
+
+  /* Input */
+  --ll-input-bg: #FFFCF5;
+  --ll-input-border: rgba(122, 79, 30, 0.2);
+  --ll-input-focus: #2A6B5C;
+  --ll-input-placeholder: #B3A394;
+
+  /* Typography */
+  --ll-font-display: 'Playfair Display', Georgia, serif;
+  --ll-font-body: 'DM Sans', system-ui, sans-serif;
+  --ll-font-mono: 'JetBrains Mono', monospace;
+
+  /* Radius */
+  --ll-radius-sm: 4px;
+  --ll-radius: 6px;
+  --ll-radius-md: 8px;
+  --ll-radius-lg: 12px;
+  --ll-radius-xl: 16px;
+}
