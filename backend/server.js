@@ -94,22 +94,37 @@ const startServer = async () => {
     // Sync models with database
     await syncDatabase();
 
-    // Start HTTP server
-    httpServer.listen(PORT, () => {
-      console.log(`
+    // Start HTTP server with port retry on EADDRINUSE
+    const tryListen = (port) => {
+      httpServer.listen(port, () => {
+        console.log(`
 ╔════════════════════════════════════════╗
 ║     BOOK EXCHANGE PLATFORM             ║
 ║     Backend Server Started             ║
 ╠════════════════════════════════════════╣
 ║                                        ║
-║  🚀 Server running on port ${PORT}           ║
-║  📡 API: http://localhost:${PORT}/api      ║
+║  🚀 Server running on port ${port}           ║
+║  📡 API: http://localhost:${port}/api      ║
 ║  🔌 Socket.io listening...              ║
 ║  📊 Database: Connected                ║
 ║                                        ║
 ╚════════════════════════════════════════╝
       `);
-    });
+      });
+
+      httpServer.on('error', (err) => {
+        if (err.code === 'EADDRINUSE') {
+          console.log(`⚠ Port ${port} is in use, trying port ${port + 1}...`);
+          httpServer.close();
+          tryListen(port + 1);
+        } else {
+          console.error('✗ Server error:', err);
+          process.exit(1);
+        }
+      });
+    };
+
+    tryListen(Number(PORT));
   } catch (error) {
     console.error('✗ Failed to start server:', error);
     process.exit(1);
