@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MapPin, Star, LogOut, Edit3, ArrowUpRight, BookOpen } from 'lucide-react';
+import { MapPin, Star, LogOut, Edit3, ArrowUpRight, BookOpen, Trash2, Camera } from 'lucide-react';
 import Navbar from '../components/Layout/Navbar';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
 import ErrorMessage from '../components/Common/ErrorMessage';
@@ -25,6 +25,8 @@ const ProfilePage = () => {
   const [editingField, setEditingField] = useState(null);
   const [editValue, setEditValue] = useState('');
   const [saving, setSaving] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const fileInputRef = React.useRef(null);
 
   useEffect(() => { if (user) loadProfile(); }, [user]);
 
@@ -79,6 +81,44 @@ const ProfilePage = () => {
     }
   };
 
+  const handleDeleteBook = async (e, bookId) => {
+    e.stopPropagation();
+    if (window.confirm('Are you sure you want to delete this book?')) {
+      try {
+        await bookService.deleteBook(bookId);
+        setUserBooks(prev => prev.filter(b => (b.id || b.book_id) !== bookId));
+        setStats(prev => ({ ...prev, books_listed: Math.max(0, prev.books_listed - 1) }));
+      } catch (err) {
+        console.error('Failed to delete book:', err);
+        alert(err?.response?.data?.message || 'Failed to delete book');
+      }
+    }
+  };
+
+  const handleAvatarChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    setUploadingAvatar(true);
+    try {
+      const res = await userService.uploadProfileImage(formData);
+      setProfileData(prev => ({ 
+        ...prev, 
+        profile_image: res.avatar_url || res.user?.profile_image,
+        avatar_url: res.avatar_url || res.user?.avatar_url 
+      }));
+    } catch (err) {
+      console.error('Failed to upload avatar:', err);
+      alert(err?.response?.data?.message || 'Failed to upload profile picture');
+    } finally {
+      setUploadingAvatar(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
   const condColor = (c) => {
     const m = { excellent: '#2A7D4F', good: '#B8860B', fair: '#D97652', poor: '#C44B2B' };
     return m[(c || '').toLowerCase()] || '#8C7B6A';
@@ -102,9 +142,30 @@ const ProfilePage = () => {
         <div className="h-36 lg:h-44" style={{ background: 'linear-gradient(135deg, #7A4F1E, #C4893A)' }} />
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-end gap-4 -mt-14 mb-6">
-            <img src={getAvatarUrl(p.avatar_url || p.profile_image, 150)} alt={p.name}
-              className="w-28 h-28 rounded-xl object-cover" style={{ border: '4px solid #FAF6EE', boxShadow: '0 4px 12px rgba(122,79,30,0.15)' }}
-              onError={(e) => { e.target.src = getAvatarUrl(null, 150); }} />
+            <div className="relative group cursor-pointer" onClick={() => !uploadingAvatar && fileInputRef.current?.click()}>
+              <img src={getAvatarUrl(p.avatar_url || p.profile_image, 150)} alt={p.name}
+                className={`w-28 h-28 rounded-xl object-cover transition-opacity ${uploadingAvatar ? 'opacity-50' : ''}`} style={{ border: '4px solid #FAF6EE', boxShadow: '0 4px 12px rgba(122,79,30,0.15)' }}
+                onError={(e) => { e.target.src = getAvatarUrl(null, 150); }} />
+              
+              <div className="absolute inset-0 bg-black bg-opacity-40 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <Camera className="h-8 w-8 text-white opacity-80" />
+              </div>
+              
+              {uploadingAvatar && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                </div>
+              )}
+              
+              <input 
+                type="file" 
+                ref={fileInputRef} 
+                onChange={handleAvatarChange} 
+                accept="image/*" 
+                className="hidden" 
+              />
+            </div>
+            
             <div className="flex-1">
               <h1 className="text-2xl lg:text-3xl" style={{ fontFamily: "'Playfair Display', serif", color: '#2C2417', fontWeight: '700' }}>{p.name || 'User'}</h1>
               <div className="flex items-center gap-1.5 mt-1 flex-wrap" style={{ color: '#8C7B6A' }}>
@@ -157,7 +218,7 @@ const ProfilePage = () => {
                   <div className="rounded-lg overflow-hidden" style={{ background: '#FFFCF5', border: '0.5px solid rgba(122,79,30,0.1)' }}>
                     <table className="w-full text-sm">
                       <thead><tr style={{ borderBottom: '0.5px solid rgba(122,79,30,0.1)' }}>
-                        {['Title', 'Author', 'Condition', 'Type', 'Price', ''].map(h => (
+                        {['Title', 'Author', 'Condition', 'Type', 'Price', 'Actions'].map(h => (
                           <th key={h} className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider" style={{ color: '#B3A394' }}>{h}</th>
                         ))}
                       </tr></thead>
@@ -173,7 +234,17 @@ const ProfilePage = () => {
                             <td className="px-4 py-3" style={{ color: '#7A4F1E', fontFamily: "'JetBrains Mono', monospace", fontWeight: '600' }}>
                               {book.type === 'sell' && book.price ? `₹${book.price}` : '—'}
                             </td>
-                            <td className="px-4 py-3"><ArrowUpRight className="h-4 w-4" style={{ color: '#8C7B6A' }} /></td>
+                            <td className="px-4 py-3 flex items-center gap-3 h-full pt-4">
+                              <ArrowUpRight className="h-4 w-4" style={{ color: '#8C7B6A' }} />
+                              <button 
+                                onClick={(e) => handleDeleteBook(e, book.id || book.book_id)} 
+                                className="text-red-500 hover:text-red-700 transition-colors p-1 rounded-md" 
+                                style={{ background: 'rgba(196,75,43,0.05)' }}
+                                title="Delete Book"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </td>
                           </tr>
                         ))}
                       </tbody>
