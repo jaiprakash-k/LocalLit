@@ -2,8 +2,8 @@
 -- BOOK EXCHANGE PLATFORM DATABASE
 -- =======================
 
-CREATE DATABASE IF NOT EXISTS booknearby;
-USE booknearby;
+CREATE DATABASE IF NOT EXISTS locallit;
+USE locallit;
 
 -- =======================
 -- USERS TABLE
@@ -14,6 +14,7 @@ CREATE TABLE Users (
   email VARCHAR(100) UNIQUE NOT NULL,
   password VARCHAR(255) NOT NULL,
   phone VARCHAR(20),
+  profile_image VARCHAR(255),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   
   INDEX idx_email (email),
@@ -69,8 +70,11 @@ CREATE TABLE Book (
   author VARCHAR(100),
   description TEXT,
   price DECIMAL(10,2),
+  listing_type ENUM('sell', 'lend', 'swap') DEFAULT 'sell',
   `condition` ENUM('new', 'like_new', 'good', 'fair', 'poor') NOT NULL,
   status ENUM('available', 'sold', 'exchanged', 'pending') DEFAULT 'available',
+  city VARCHAR(100),
+  state VARCHAR(100),
   uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   
   FOREIGN KEY (seller_id) REFERENCES Users(user_id) ON DELETE CASCADE ON UPDATE CASCADE,

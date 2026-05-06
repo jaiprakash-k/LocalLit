@@ -38,6 +38,10 @@ const User = sequelize.define('User', {
   created_at: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
+  },
+  profile_image: {
+    type: DataTypes.STRING(255),
+    allowNull: true
   }
 }, {
   tableName: 'Users',
