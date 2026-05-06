@@ -98,7 +98,7 @@ export const getAllBooks = async (req, res, next) => {
         { 
           model: User, 
           as: 'seller',
-          attributes: ['user_id', 'name', 'email'],
+          attributes: ['user_id', 'name', 'email', 'profile_image'],
           include: [{
             model: UserLocation,
             as: 'UserLocation',
@@ -151,7 +151,7 @@ export const getBookById = async (req, res, next) => {
         { 
           model: User, 
           as: 'seller',
-          attributes: ['user_id', 'name', 'email', 'phone']
+          attributes: ['user_id', 'name', 'email', 'phone', 'profile_image']
         }
       ]
     });

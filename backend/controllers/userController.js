@@ -101,6 +101,10 @@ export const updateProfile = async (req, res, next) => {
     // Handle profile image upload
     if (req.file) {
       const profileImagePath = `/uploads/${req.file.filename}`;
+      await User.update(
+        { profile_image: profileImagePath },
+        { where: { user_id: userId } }
+      );
       await UserProfile.update(
         { profile_image: profileImagePath },
         { where: { user_id: userId } }
@@ -140,6 +144,14 @@ export const uploadProfileImage = async (req, res, next) => {
     }
 
     const profileImagePath = `/uploads/${req.file.filename}`;
+    
+    // Update User table
+    await User.update(
+      { profile_image: profileImagePath },
+      { where: { user_id: userId } }
+    );
+
+    // Update UserProfile table
     await UserProfile.update(
       { profile_image: profileImagePath },
       { where: { user_id: userId } }
@@ -148,6 +160,7 @@ export const uploadProfileImage = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: 'Profile image uploaded successfully',
+      avatar_url: profileImagePath, // Match what frontend expects
       imageUrl: profileImagePath
     });
   } catch (error) {
